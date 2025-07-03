@@ -1,5 +1,7 @@
 package hu.nl.verantwoording;
 
+import hu.nl.verantwoording.data.DatabaseConfig;
+import hu.nl.verantwoording.domain.Customer;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;

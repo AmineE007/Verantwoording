@@ -1,5 +1,6 @@
-package hu.nl.verantwoording;
+package hu.nl.verantwoording.domain;
 
+import hu.nl.verantwoording.data.DatabaseConfig;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import java.sql.*;

@@ -1,3 +1,4 @@
+
 -- ==============================
 -- TABEL: Customers
 -- Beschrijving: Alle klanten (zowel geregistreerde als niet-geregistreerde)
@@ -6,7 +7,7 @@ CREATE TABLE Customers (
                            id SERIAL PRIMARY KEY,
                            first_name VARCHAR(255),
                            last_name VARCHAR(255),
-                           email VARCHAR(255) UNIQUE,
+                           email VARCHAR(255),  -- UNIQUE constraint verwijderd, wordt in code afgehandeld
                            date_of_birth DATE,
                            phone_number INT,
                            address VARCHAR(255),
@@ -24,7 +25,7 @@ CREATE TABLE Customers (
 CREATE TABLE Users (
                        id SERIAL PRIMARY KEY,
                        customer_id INT UNIQUE REFERENCES Customers(id),
-                       email VARCHAR(255) UNIQUE NOT NULL,
+                       email VARCHAR(255) NOT NULL,  -- UNIQUE constraint verwijderd, wordt in code afgehandeld
                        password VARCHAR(255) NOT NULL
 );
 
@@ -103,39 +104,30 @@ CREATE TABLE Components (
                             id SERIAL PRIMARY KEY,
                             name VARCHAR(255),
                             price NUMERIC(5, 2),
-                            category_id INT,
+                            category VARCHAR(255),  -- Vervangen van category_id door directe enum string
                             stock INT,
                             chipset INT,
                             image_id INT
 );
 
 -- ==============================
--- KoppelTABEL: Components_Builds
+-- KoppelTABEL: build_components (naam omgedraaid)
 -- Beschrijving: Veel-op-veel relatie tussen Components en Builds
 -- ==============================
-CREATE TABLE Components_Builds (
-                                   component_id INT REFERENCES Components(id),
-                                   build_id UUID REFERENCES Builds(id),
-                                   PRIMARY KEY (component_id, build_id)
+CREATE TABLE build_components (
+                                  build_id UUID REFERENCES Builds(id),
+                                  component_id INT REFERENCES Components(id),
+                                  PRIMARY KEY (build_id, component_id)
 );
 
 -- ==============================
--- KoppelTABEL: Components_Orders
+-- KoppelTABEL: order_components (naam omgedraaid)
 -- Beschrijving: Veel-op-veel relatie tussen Components en Orders
 -- ==============================
-CREATE TABLE Components_Orders (
-                                   component_id INT REFERENCES Components(id),
-                                   order_id INT REFERENCES Orders(id),
-                                   PRIMARY KEY (component_id, order_id)
-);
-
--- ==============================
--- TABEL: Categories
--- Beschrijving: Categorieën voor componenten (bijv. RAM, CPU, etc.)
--- ==============================
-CREATE TABLE Categories (
-                            id SERIAL PRIMARY KEY,
-                            name TEXT
+CREATE TABLE order_components (
+                                  order_id INT REFERENCES Orders(id),
+                                  component_id INT REFERENCES Components(id),
+                                  PRIMARY KEY (order_id, component_id)
 );
 
 -- ==============================
@@ -162,11 +154,11 @@ CREATE TABLE Attribute_Values (
 );
 
 -- ==============================
--- KoppelTABEL: Attribute_Values_Components
+-- KoppelTABEL: component_attribute_values (naam omgedraaid)
 -- Beschrijving: Koppelt waardes van attributen aan componenten
 -- ==============================
-CREATE TABLE Attribute_Values_Components (
-                                             attribute_value_id INT REFERENCES Attribute_Values(id),
-                                             component_id INT REFERENCES Components(id),
-                                             PRIMARY KEY (attribute_value_id, component_id)
+CREATE TABLE component_attribute_values (
+                                            component_id INT REFERENCES Components(id),
+                                            attribute_value_id INT REFERENCES Attribute_Values(id),
+                                            PRIMARY KEY (component_id, attribute_value_id)
 );
