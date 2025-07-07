@@ -1,79 +1,138 @@
-export class Registratie {
+import "./styles/registratie.css";
+export default class Registratie {
     constructor() {
         this.element = document.createElement("div");
-        this.header();
         this.render();
-        this.footer();
-    }
-
-    header() {
-        const header = new Header().getElement();
-        this.element.appendChild(header);
-    }
-
-    footer() {
-        const footer = new Footer().getElement();
-        this.element.appendChild(footer);
     }
 
     render() {
+        // Clear existing content
+        this.element.replaceChildren();
+        
         const content = document.createElement("main");
         content.classList.add("register-page");
         content.setAttribute("role", "main");
         content.setAttribute("aria-label", "Registratiepagina");
 
-        content.innerHTML = `
-            <form id="Registratie-Container" aria-labelledby="register-title">
-                <h3 id="register-title">Account Registreren</h3>
-
-                <div class="form-section">
-                    <label for="email">E-mailadres</label>
-                    <input id="email" type="email" name="email" required autocomplete="email">
-
-                    <label for="password">Wachtwoord</label>
-                    <input id="password" type="password" name="password" required autocomplete="new-password">
-
-                    <label for="confirm_password">Herhaal Wachtwoord</label>
-                    <input id="confirm_password" type="password" name="confirm_password" required autocomplete="new-password">
-                </div>
-
-                <div class="form-section">
-                    <label for="first_name">Voornaam</label>
-                    <input id="first_name" type="text" name="first_name" required>
-
-                    <label for="last_name">Achternaam</label>
-                    <input id="last_name" type="text" name="last_name" required>
-                </div>
-
-                <div class="form-section">
-                    <label for="date_of_birth">Geboortedatum</label>
-                    <input id="date_of_birth" type="date" name="date_of_birth">
-
-                    <label for="phone_number">Telefoonnummer</label>
-                    <input id="phone_number" type="tel" name="phone_number">
-                </div>
-
-                <div class="form-section">
-                    <label for="address">Adres</label>
-                    <input id="address" type="text" name="address">
-
-                    <label for="city">Stad</label>
-                    <input id="city" type="text" name="city">
-
-                    <label for="postal_code">Postcode</label>
-                    <input id="postal_code" type="text" name="postal_code">
-
-                    <label for="country">Land</label>
-                    <input id="country" type="text" name="country">
-                </div>
-
-                <button type="submit">Registreren</button>
-            </form>
-        `;
-
+        // Create form
+        const form = this.createRegistrationForm();
+        content.appendChild(form);
+        
         this.element.appendChild(content);
+    }
 
-        const form = content.querySelector("#Registratie-Container");
+    createRegistrationForm() {
+        const form = document.createElement("form");
+        form.id = "Registratie-Container";
+        form.setAttribute("aria-labelledby", "register-title");
+
+        // Create title
+        const title = document.createElement("h3");
+        title.id = "register-title";
+        title.textContent = "Account Registreren";
+        form.appendChild(title);
+
+        // Create form sections
+        const personalSection = this.createPersonalSection();
+        const contactSection = this.createContactSection();
+        const addressSection = this.createAddressSection();
+        const submitButton = this.createSubmitButton();
+
+        form.appendChild(personalSection);
+        form.appendChild(contactSection);
+        form.appendChild(addressSection);
+        form.appendChild(submitButton);
+
+        // Add form submit event listener
+        this.addFormEventListener(form);
+
+        return form;
+    }
+
+    createPersonalSection() {
+        const section = document.createElement("div");
+        section.className = "form-section";
+
+        const fields = [
+            { id: "email", type: "email", label: "E-mailadres", required: true, autocomplete: "email" },
+            { id: "password", type: "password", label: "Wachtwoord", required: true, autocomplete: "new-password" },
+            { id: "confirm_password", type: "password", label: "Herhaal Wachtwoord", required: true, autocomplete: "new-password" }
+        ];
+
+        fields.forEach(field => {
+            const fieldContainer = this.createFormField(field);
+            section.appendChild(fieldContainer);
+        });
+
+        return section;
+    }
+
+    createContactSection() {
+        const section = document.createElement("div");
+        section.className = "form-section";
+
+        const fields = [
+            { id: "first_name", type: "text", label: "Voornaam", required: true },
+            { id: "last_name", type: "text", label: "Achternaam", required: true }
+        ];
+
+        fields.forEach(field => {
+            const fieldContainer = this.createFormField(field);
+            section.appendChild(fieldContainer);
+        });
+
+        return section;
+    }
+
+    createAddressSection() {
+        const section = document.createElement("div");
+        section.className = "form-section";
+
+        const fields = [
+            { id: "date_of_birth", type: "date", label: "Geboortedatum" },
+            { id: "phone_number", type: "tel", label: "Telefoonnummer" },
+            { id: "address", type: "text", label: "Adres" },
+            { id: "city", type: "text", label: "Stad" },
+            { id: "postal_code", type: "text", label: "Postcode" },
+            { id: "country", type: "text", label: "Land" }
+        ];
+
+        fields.forEach(field => {
+            const fieldContainer = this.createFormField(field);
+            section.appendChild(fieldContainer);
+        });
+
+        return section;
+    }
+
+    createFormField(field) {
+        const container = document.createElement("div");
+        
+        const label = document.createElement("label");
+        label.setAttribute("for", field.id);
+        label.textContent = field.label;
+        
+        const input = document.createElement("input");
+        input.id = field.id;
+        input.type = field.type;
+        input.name = field.id;
+        if (field.required) input.required = true;
+        if (field.autocomplete) input.autocomplete = field.autocomplete;
+        
+        container.appendChild(label);
+        container.appendChild(input);
+        
+        return container;
+    }
+
+    createSubmitButton() {
+        const button = document.createElement("button");
+        button.type = "submit";
+        button.textContent = "Registreren";
+        return button;
+    }
+
+    addFormEventListener(form) {
         form.addEventListener("submit", async (event) => {
             event.preventDefault();
 
@@ -123,5 +182,9 @@ export class Registratie {
 
     getElement() {
         return this.element;
+    }
+
+    appendTo(container) {
+        container.appendChild(this.element);
     }
 }
