@@ -1,4 +1,4 @@
-package hu.nl.verantwoording.domain;
+package hu.nl.verantwoording.model;
 
 public class Customer {
     private int id;

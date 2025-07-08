@@ -1,5 +1,6 @@
-package hu.nl.verantwoording.domain;
+package hu.nl.verantwoording.resource;
 
+import hu.nl.verantwoording.model.Customer;
 import hu.nl.verantwoording.data.DatabaseConfig;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;

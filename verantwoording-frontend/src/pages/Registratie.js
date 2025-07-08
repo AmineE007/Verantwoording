@@ -1,3 +1,4 @@
+import '../styles/Registratie.css';
 export default class Registratie {
     constructor() {
         this.element = document.createElement("div");
