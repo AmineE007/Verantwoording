@@ -1,6 +1,6 @@
 package hu.nl.verantwoording.data;
 
-import hu.nl.verantwoording.domain.Customer;
+import hu.nl.verantwoording.model.Customer;
 
 import java.sql.*;
 import java.util.ArrayList;

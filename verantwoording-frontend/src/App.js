@@ -1,6 +1,6 @@
 import Router from './router/router.js';
-import Header from './Components/Header.js';
-import Footer from './Components/footer.js'; // Zorg ervoor dat je de Footer component importeert
+import Header from './components/Header.js';
+import Footer from './components/footer.js'; // Zorg ervoor dat je de Footer component importeert
 export default class App {
     constructor() {
         this.router = new Router();
