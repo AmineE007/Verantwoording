@@ -1,3 +1,5 @@
+import '../styles/Registratie.css';
+
 export default class Registratie {
     constructor() {
         this.element = document.createElement("div");
@@ -5,18 +7,16 @@ export default class Registratie {
     }
 
     render() {
-        // Clear existing content
         this.element.replaceChildren();
-        
+
         const content = document.createElement("main");
         content.classList.add("register-page");
         content.setAttribute("role", "main");
         content.setAttribute("aria-label", "Registratiepagina");
 
-        // Create form
         const form = this.createRegistrationForm();
         content.appendChild(form);
-        
+
         this.element.appendChild(content);
     }
 
@@ -25,102 +25,70 @@ export default class Registratie {
         form.id = "Registratie-Container";
         form.setAttribute("aria-labelledby", "register-title");
 
-        // Create title
         const title = document.createElement("h3");
         title.id = "register-title";
         title.textContent = "Account Registreren";
         form.appendChild(title);
 
-        // Create form sections
-        const personalSection = this.createPersonalSection();
-        const contactSection = this.createContactSection();
-        const addressSection = this.createAddressSection();
-        const submitButton = this.createSubmitButton();
+        form.appendChild(this.createPersonalSection());
+        form.appendChild(this.createContactSection());
+        form.appendChild(this.createAddressSection());
+        form.appendChild(this.createSubmitButton());
 
-        form.appendChild(personalSection);
-        form.appendChild(contactSection);
-        form.appendChild(addressSection);
-        form.appendChild(submitButton);
-
-        // Add form submit event listener
         this.addFormEventListener(form);
 
         return form;
     }
 
     createPersonalSection() {
-        const section = document.createElement("div");
-        section.className = "form-section";
-
-        const fields = [
+        return this.createSection([
             { id: "email", type: "email", label: "E-mailadres", required: true, autocomplete: "email" },
             { id: "password", type: "password", label: "Wachtwoord", required: true, autocomplete: "new-password" },
             { id: "confirm_password", type: "password", label: "Herhaal Wachtwoord", required: true, autocomplete: "new-password" }
-        ];
-
-        fields.forEach(field => {
-            const fieldContainer = this.createFormField(field);
-            section.appendChild(fieldContainer);
-        });
-
-        return section;
+        ]);
     }
 
     createContactSection() {
-        const section = document.createElement("div");
-        section.className = "form-section";
-
-        const fields = [
+        return this.createSection([
             { id: "first_name", type: "text", label: "Voornaam", required: true },
             { id: "last_name", type: "text", label: "Achternaam", required: true }
-        ];
-
-        fields.forEach(field => {
-            const fieldContainer = this.createFormField(field);
-            section.appendChild(fieldContainer);
-        });
-
-        return section;
+        ]);
     }
 
     createAddressSection() {
-        const section = document.createElement("div");
-        section.className = "form-section";
-
-        const fields = [
+        return this.createSection([
             { id: "date_of_birth", type: "date", label: "Geboortedatum" },
             { id: "phone_number", type: "tel", label: "Telefoonnummer" },
             { id: "address", type: "text", label: "Adres" },
             { id: "city", type: "text", label: "Stad" },
+            { id: "state", type: "text", label: "Provincie" },
             { id: "postal_code", type: "text", label: "Postcode" },
             { id: "country", type: "text", label: "Land" }
-        ];
+        ]);
+    }
 
-        fields.forEach(field => {
-            const fieldContainer = this.createFormField(field);
-            section.appendChild(fieldContainer);
-        });
-
+    createSection(fields) {
+        const section = document.createElement("div");
+        section.className = "form-section";
+        fields.forEach(field => section.appendChild(this.createFormField(field)));
         return section;
     }
 
     createFormField(field) {
         const container = document.createElement("div");
-        
         const label = document.createElement("label");
         label.setAttribute("for", field.id);
         label.textContent = field.label;
-        
+
         const input = document.createElement("input");
         input.id = field.id;
         input.type = field.type;
         input.name = field.id;
         if (field.required) input.required = true;
         if (field.autocomplete) input.autocomplete = field.autocomplete;
-        
+
         container.appendChild(label);
         container.appendChild(input);
-        
         return container;
     }
 
@@ -137,7 +105,6 @@ export default class Registratie {
 
             const formData = new FormData(form);
 
-            // Wachtwoord validatie
             if (formData.get("password") !== formData.get("confirm_password")) {
                 alert("Wachtwoorden komen niet overeen!");
                 return;
@@ -148,33 +115,38 @@ export default class Registratie {
                 lastName: formData.get("last_name"),
                 email: formData.get("email"),
                 password: formData.get("password"),
-                dateOfBirth: formData.get("date_of_birth"),
-                phoneNumber: formData.get("phone_number"),
-                address: formData.get("address"),
-                city: formData.get("city"),
-                postalCode: formData.get("postal_code"),
-                country: formData.get("country")
+                dateOfBirth: formData.get("date_of_birth") || null,
+                phoneNumber: formData.get("phone_number") || null,
+                address: formData.get("address") || null,
+                city: formData.get("city") || null,
+                state: formData.get("state") || null,
+                postalCode: formData.get("postal_code") || null,
+                country: formData.get("country") || null
             };
 
+            const apiUrl = '/api/registratie'; // Adjust the API endpoint as needed
+
             try {
-                const response = await fetch("/Verantwoording_war_exploded/api/registratie", {
-                    method: "POST",
+                // Step 3: Use apiUrl in your fetch call
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
                     headers: {
-                        "Content-Type": "application/json"
+                        'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(registrationData)
                 });
 
-                const data = await response.json();
-                if (response.ok) {
-                    alert("Registratie succesvol!");
-                    window.location.href = "/login"; // Pas aan naar je login pagina
-                } else {
-                    alert(data.message || "Registratie mislukt!");
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Registratie mislukt');
                 }
+
+                const data = await response.json();
+                alert(data.message || 'Registratie succesvol!');
+                window.location.href = '/login';
             } catch (error) {
-                console.error("Fout bij registreren:", error);
-                alert("Er is een fout opgetreden, probeer opnieuw.");
+                console.error('Fout bij registratie:', error);
+                alert(error.message || 'Er is een fout opgetreden bij de registratie');
             }
         });
     }
