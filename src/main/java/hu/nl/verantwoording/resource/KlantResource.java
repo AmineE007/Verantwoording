@@ -1,7 +1,7 @@
 package hu.nl.verantwoording.resource;
 
-import hu.nl.verantwoording.model.Customer;
 import hu.nl.verantwoording.data.DatabaseConfig;
+import hu.nl.verantwoording.model.Klant;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import java.sql.*;
@@ -10,24 +10,25 @@ import java.util.List;
 
 @Path("/customers")
 @Produces(MediaType.APPLICATION_JSON)
-public class CustomerResource {
+public class KlantResource {
 
     @GET
-    public List<Customer> getAllCustomers() throws SQLException {
-        List<Customer> customers = new ArrayList<>();
-        String sql = "SELECT ID, First_name, Last_name, email FROM customers";
+    public List<Klant> getAllCustomers() throws SQLException {
+        List<Klant> customers = new ArrayList<>();
+        String sql = "SELECT id, first_name, last_name, email FROM customers";
 
         try (Connection conn = DatabaseConfig.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                customers.add(new Customer(
+                Klant klant = new Klant(
                         rs.getInt("id"),
-                        rs.getString("First_name"),
-                        rs.getString("Last_name"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
                         rs.getString("email")
-                ));
+                );
+                customers.add(klant);
             }
         }
         return customers;
