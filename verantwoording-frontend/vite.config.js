@@ -2,7 +2,7 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-    base: '/verantwoording_war/',
+    base: '/',
     server: {
         historyApiFallback: true
     }

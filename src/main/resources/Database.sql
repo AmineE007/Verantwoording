@@ -9,7 +9,7 @@ CREATE TABLE Customers (
                            last_name VARCHAR(255),
                            email VARCHAR(255),  -- UNIQUE constraint verwijderd, wordt in code afgehandeld
                            date_of_birth DATE,
-                           phone_number INT,
+                           phone_number VARCHAR(20),
                            address VARCHAR(255),
                            city VARCHAR(255),
                            state VARCHAR(255),
@@ -162,3 +162,5 @@ CREATE TABLE component_attribute_values (
                                             attribute_value_id INT REFERENCES Attribute_Values(id),
                                             PRIMARY KEY (component_id, attribute_value_id)
 );
+ALTER TABLE Customers
+    ALTER COLUMN phone_number TYPE VARCHAR(20);
