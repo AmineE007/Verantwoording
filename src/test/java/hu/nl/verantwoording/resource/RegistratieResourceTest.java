@@ -12,3 +12,4 @@ class RegistratieResourceTest {
         assertEquals("Registratie-endpoint werkt. Gebruik POST om een klant te registreren.", result);
     }
 }
+
