@@ -123,6 +123,9 @@ export default class Registratie {
                 postalCode: formData.get("postal_code") || null,
                 country: formData.get("country") || null
             };
+            const contextPath = window.location.pathname;startsWith('/verantwoording_war_exploded')
+                ? '/verantwoording_war_exploded'
+                : '';
 
             const apiUrl = '/api/registratie'; // Adjust the API endpoint as needed
 

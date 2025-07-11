@@ -1,12 +1,14 @@
 package hu.nl.verantwoording.model;
 
+import java.time.LocalDate;
+
 public class Klant {
     private int id;
     private String firstName;
     private String lastName;
     private String email;
     private String password;
-    private String dateOfBirth;
+    private LocalDate dateOfBirth;
     private String phoneNumber;
     private String address;
     private String city;
@@ -14,12 +16,8 @@ public class Klant {
     private String postalCode;
     private String country;
 
-    // Default constructor
-    public Klant() {
-        // Lege constructor voor JAX-RS
-    }
+    public Klant() {}
 
-    // Constructor
     public Klant(int id, String firstName, String lastName, String email) {
         this.id = id;
         this.firstName = firstName;
@@ -27,7 +25,7 @@ public class Klant {
         this.email = email;
     }
 
-    // Getters en Setters
+    // Getters & setters
     public String getFirstName() { return firstName; }
     public void setFirstName(String firstName) { this.firstName = firstName; }
 
@@ -40,8 +38,8 @@ public class Klant {
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
 
-    public String getDateOfBirth() { return dateOfBirth; }
-    public void setDateOfBirth(String dateOfBirth) { this.dateOfBirth = dateOfBirth; }
+    public LocalDate getDateOfBirth() { return dateOfBirth; }
+    public void setDateOfBirth(LocalDate dateOfBirth) { this.dateOfBirth = dateOfBirth; }
 
     public String getPhoneNumber() { return phoneNumber; }
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
